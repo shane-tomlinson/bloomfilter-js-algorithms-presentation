@@ -1,0 +1,254 @@
+<html>
+<head>
+    <script src="bower_components/headjs/dist/1.0.0/head.js"></script>
+    <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="bower_components/reveal.js/css/theme/sky.css">
+    <link rel="stylesheet" href="static/bloomfilter.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section id="intro">
+        <h1>Bloom filters</h1>
+
+        <p>
+          <img src="static/bloomfilter.svg" class="bloomfilter_example" alt="Bloom filter"/>
+        </p>
+
+        <cite>
+          Image released to the public domain <a href="https://commons.wikimedia.org/wiki/File:Bloom_filter.svg">by David Eppstein</a>.
+        </cite>
+      </section>
+
+      <section id="me">
+        <h2>Me</h2>
+        <p>
+          Shane Tomlinson
+        </p>
+        <p>
+          <a href="https://shanetomlinson.com">https://shanetomlinson.com</a>
+        </p>
+        <p>
+          <a href="https://twitter.com/shane_tomlinson">@shane_tomlinson</a>
+        </p>
+        <p>
+          <a href="https://github.com/shane-tomlinson">https://github.com/shane-tomlinson</a>
+        </p>
+      </section>
+
+      <section id="code">
+        <h2>Code</h2>
+        <a href="https://github.com/LondonAlgorithms/Bloomfilters">https://github.com/LondonAlgorithms/Bloomfilters</a>
+      </section>
+
+      <section id="problem_intro">
+        <h2>Start with a problem</h2>
+      </section>
+
+      <section id="passwords">
+        <p>
+          <img src="static/top25passwords.jpg" width=700" alt="top 25 passwords">
+        </p>
+
+        <cite>Top 25 Most Used Internet Passwords - An infographic by the team at <a href="http://www.tomfanelli.com/top-25-used-internet-passwords/">Tom Fanelli - Infographic Marketing</a>.
+        </cite>
+      </section>
+
+      <section id="goal">
+        <h2>Goal</h2>
+        <p>
+          Ban users from using one of the top 50k most common passwords.
+        </p>
+
+        <p class="fragment" data-fragment-index="1">Math(s) speak: determine if an item is a member of a set.</p>
+
+      </section>
+
+      <section id="constraints">
+        <h2>Constraints</h2>
+        <ol class="fragment" data-fragment-index="1">
+          <li>No data can be sent to the server.</li>
+          <li>Download must be "reasonably" sized.</li>
+        </ol>
+      </section>
+
+      <section id="representations">
+        <h2>What data structures could we use?</h2>
+      </section>
+
+      <section id="hash-table">
+        <h2>Hash tables</h2>
+
+        <p>
+          Create a bit array, hash entries to a position in array.
+        </p>
+
+        <p>
+          Download hash table, run password through hash function, check if bit is set.
+        </p>
+
+
+        <div class="fragment" data-fragment-index="1">
+          <h3>Collisions</h3>
+
+          <ul>
+            <li>Inevitable. See <a href="https://en.wikipedia.org/wiki/Birthday_problem">birthday problem</a>.</li>
+            <li>Causes false positives.</li>
+        </div>
+        <p>
+      </section>
+
+      <section id="collisions">
+        <h2>Reducing collisions</h2>
+
+        <ul>
+          <li>Expand the size of the hash table.</li>
+          <li>Use more than one hash function.</li>
+        </ul>
+      </section>
+
+      <section id="loosen_restrictions">
+        <h2>What if the occasional false positive is OK?</h2>
+      </section>
+
+      <section id="bloomfilter_intro">
+        <h2>Bloom filter</h2>
+
+        <blockquote>
+          A Bloom filter is a space-efficient probabilistic data structure, conceived by Burton Howard Bloom in 1970, that is used to test whether an element is a member of a set.
+        </blockquote>
+
+        <p>
+          <cite>
+            <a href="https://en.wikipedia.org/wiki/Bloom_filter">https://en.wikipedia.org/wiki/Bloom_filter</a>
+          </cite>
+        </p>
+
+      </section>
+
+      <section id="bloomfilter_photo">
+        <h2>It looks like an onion</h2>
+
+        <img src="static/bloomfilter.svg" class="bloomfilter_example" width="400">
+      </section>
+
+      <section id="bloomfilter_properties">
+        <h2>Properties</h2>
+
+        <ol>
+          <li>Has two primary functions, <b>add</b> and <b>test</b>.</li>
+          <li>If an item is in the set, <em>test</em> will <b>always return true</b>.</li>
+          <li>If an item is <em>not</em> in the set, <em>test</em> <b>might return true</b>.</li>
+          <li>Rate of false positives is configurable.</li>
+        </ol>
+      </section>
+
+      <section id="bloomfilter_secondary_properties">
+        <h2>Secondary properties</h2>
+
+        <ol>
+          <li>Hash table can be downloaded and tested against.</li>
+          <li>False positive rate <a href="http://pages.cs.wisc.edu/~cao/papers/summary-cache/node8.html">of &lt;1% uses ~9.6 bits per member.</a></li>
+          <li>Supports union and intersection of two or more filters.</li>
+        </ol>
+      </section>
+
+      <section id="bloomfilter_nomenclature">
+        <h2>Nomenclature</h2>
+
+        <dl>
+          <dt><b>k</b></dt> <dd>number of hash functions.</dd>
+          <dt><b>m</b></dt> <dd>size of hash table, in bits.</dd>
+          <dt><b>n</b></dt> <dd>size of set.</dd>
+        </dl>
+      </section>
+
+      <section id="bloomfilter_algorithm_title">
+        <h2>Bloom filter algorithm</h2>
+      </section>
+
+      <section id="bloomfilter_algorithm">
+
+        <h3>Create</h3>
+        <ol>
+          <li>Create a bit array of size <b>m</b>.</li>
+          <li>Fill bit array with all <b>0</b>s.</li>
+        </ol>
+
+        <h3>Add</h3>
+        <ol>
+          <li>Run item through <b>k</b> independent hash functions.</li>
+          <li>Set the corresponding entries in the bit array to <b>1</b>.</li>
+        </ol>
+
+        <h3>Test</h3>
+        <ol>
+          <li>Run item through <b>k</b> independent hash functions.</li>
+          <li>
+            Check the corresponding entries in the bit array.
+            <ol>
+              <li>If all entries are <b>1</b>, return <em>true</em>, otherwise return <em>false</em>.</li>
+            </ol>
+          </li>
+        </ol>
+      </section>
+
+      <section id="k_independent_wtf">
+        <h2>K independent ... WTF?</h2>
+      </section>
+
+      <section id="k_independent_hash_functions">
+        <h2>K independent hash functions</h2>
+
+        <p>
+          Can be simulated <a href="http://willwhim.wpengine.com/2011/09/03/producing-n-hash-functions-by-hashing-only-once/">with only two hash functions</a>.
+        </p>
+
+        <p>
+          To find an arbitrary <b>i</b> &lt; <b>k</b>:
+        </p>
+        <code>
+          hash(i) = (a + b * i ) % m;
+        </code>
+
+        <p>
+        Where <b>a</b> is the result of Hash 1, <b>b</b> is the result of Hash 2, and <b>m</b> is the size
+        of the bit array.
+        </p>
+      </section>
+
+      <section>
+        <h2>To adjust false positive rate</h2>
+
+        <p>Fiddle with <b>k</b> and <b>m</b>.</p>
+
+        <div class="fragment" data-fragment-index="1">
+          <p>
+            Increasing <b>m</b> gives us more space (bigger download).
+          </p>
+          <p>
+            Increasing <b>k</b> gives us a better chance to find "0"s, but fills the hash table more quickly.
+          </p>
+        </div>
+
+        <div class="fragment" data-fragment-index="2">
+          Look at <a href="http://pages.cs.wisc.edu/~cao/papers/summary-cache/node8.html">this table.</a>
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+  <script src="bower_components/reveal.js/js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      dependencies: [
+        // Interpret Markdown in <section> elements
+        { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      ],
+      history: true
+    });
+  </script>
+</body>
+</html>

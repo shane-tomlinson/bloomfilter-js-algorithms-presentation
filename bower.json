@@ -1,0 +1,22 @@
+{
+  "name": "Bloomfilter",
+  "authors": [
+    "Shane Tomlinson <shane@shanetomlinson.com>"
+  ],
+  "description": "Bloomfilter presentation by Shane Tomlinson",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Bloomfilter"
+  ],
+  "license": "MIT",
+  "homepage": "https://shanetomlinson.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
