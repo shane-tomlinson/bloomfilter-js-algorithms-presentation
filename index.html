@@ -85,6 +85,10 @@
         <h2>What data structures could we use?</h2>
       </section>
 
+      <section id="loosen_restrictions">
+        <h2>What if the occasional false positive is OK?</h2>
+      </section>
+
       <section id="hash-table">
         <h2>Hash table</h2>
 
@@ -96,28 +100,16 @@
             <cite>Image released to the public domain <a href="https://commons.wikimedia.org/wiki/File:Hash_table_4_1_0_0_0_0_0_LL.svg">by Jorge Stolfi</a>.
           </span>
         </p>
-
-        <p class="fragment" data-fragment-index="1">
-          Download hash table, run password through hash function, check if bit is set.
-        </p>
-
       </section>
 
       <section id="hash_table_properties">
         <h2>Hash table properties</h2>
 
         <ul>
+          <li>Downloadble</li>
           <li>Worst case O(1) insertion and lookup</li>
           <li>Fixed size</li>
           <li>No need to re-balance</li>
-        </ul>
-      </section>
-
-      <section id="hash_table_drawbacks">
-        <h2>Drawbacks</h2>
-        <ul>
-          <li>Collisions</li>
-          <li>Inefficient space utilization for small sets</li>
         </ul>
       </section>
 
@@ -137,10 +129,6 @@
           <li>Expand the size of the hash table.</li>
           <li>Use more than one hash function.</li>
         </ul>
-      </section>
-
-      <section id="loosen_restrictions">
-        <h2>What if the occasional false positive is OK?</h2>
       </section>
 
       <section id="bloomfilter_intro">
@@ -179,7 +167,6 @@
         <h2>Secondary properties</h2>
 
         <ol>
-          <li>Hash table can be downloaded and tested against.</li>
           <li>False positive rate <a href="http://pages.cs.wisc.edu/~cao/papers/summary-cache/node8.html">of &lt;1% uses ~9.6 bits per member.</a></li>
           <li>Supports union and intersection of two or more filters.</li>
         </ol>
