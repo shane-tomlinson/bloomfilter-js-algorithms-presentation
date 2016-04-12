@@ -1,9 +1,16 @@
 .reveal cite {
-  font-size: 16px;
   color: #aaa;
+  font-size: 12px;
 }
 
-.reveal img.bloomfilter_example {
+.reveal img.thin-border {
   border-width: 1px;
+}
+
+.reveal section .flex-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
